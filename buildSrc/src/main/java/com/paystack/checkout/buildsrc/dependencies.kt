@@ -2,7 +2,10 @@ package com.paystack.checkout.buildsrc
 
 object Libs {
     const val androidGradlePlugin = "com.android.tools.build:gradle:4.1.0-rc02"
+    const val kotlinResult = "com.michael-bull.kotlin-result:kotlin-result:1.1.9"
+
     const val junit = "junit:junit:4.13"
+    const val mockitoKotlin = "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
 
     object Kotlin {
         private const val version = "1.4.0"
