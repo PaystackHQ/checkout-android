@@ -1,8 +1,9 @@
 import com.paystack.checkout.buildsrc.Libs
 
 plugins {
-    id 'com.android.library'
-    id 'kotlin-android'
+    id('com.android.library')
+    id('kotlin-android')
+    id("kotlin-kapt")
 }
 
 assemble.dependsOn('lint')
@@ -39,6 +40,7 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
+        freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
     }
 
     lintOptions {
@@ -56,10 +58,15 @@ dependencies {
     implementation Libs.OkHttp.okhttp
     implementation Libs.OkHttp.loggingInterceptor
 
-//    implementation Libs.Moshi.moshi
-//    implementation Libs.Moshi.moshiCodegen
+    implementation Libs.kotlinResult
+
+    implementation Libs.Moshi.moshi
+    kapt Libs.Moshi.moshiCodegen
 
     testImplementation Libs.junit
+    testImplementation Libs.mockitoKotlin
+    testImplementation Libs.Coroutines.test
+
     androidTestImplementation Libs.AndroidX.Test.Ext.junit
     androidTestImplementation Libs.AndroidX.Test.espressoCore
 }
