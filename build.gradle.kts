@@ -23,6 +23,4 @@ allprojects {
     }
 }
 
-subprojects {
-    apply(plugin = "org.jlleitschuh.gradle.ktlint")
-}
+apply(plugin = "org.jlleitschuh.gradle.ktlint")
