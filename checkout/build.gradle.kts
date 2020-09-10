@@ -56,6 +56,7 @@ dependencies {
     implementation(Libs.kotlinResult)
 
     implementation(Libs.Moshi.moshi)
+    implementation(Libs.moshiLazyAdapters)
     kapt(Libs.Moshi.moshiCodegen)
 
     testImplementation(Libs.junit)
