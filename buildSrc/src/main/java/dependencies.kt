@@ -3,6 +3,9 @@ object Libs {
     const val kotlinResult = "com.michael-bull.kotlin-result:kotlin-result:1.1.9"
     const val ktlintGradlePlugin = "org.jlleitschuh.gradle:ktlint-gradle:9.4.0"
 
+    const val moshiLazyAdapters = "com.serjltt.moshi:moshi-lazy-adapters:2.2"
+
+
     const val junit = "junit:junit:4.13"
     const val mockitoKotlin = "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
 

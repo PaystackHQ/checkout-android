@@ -1,6 +1,7 @@
 package com.paystack.checkout.data.remote.di
 
 import com.paystack.checkout.data.remote.PaystackApi
+import com.serjltt.moshi.adapters.Wrapped
 import com.squareup.moshi.Moshi
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -25,7 +26,9 @@ object ApiModule : ApiComponent {
         .addNetworkInterceptor(loggingInterceptor)
         .build()
 
-    override val moshi: Moshi = Moshi.Builder().build()
+    override val moshi: Moshi = Moshi.Builder()
+        .add(Wrapped.ADAPTER_FACTORY)
+        .build()
 
     override val retrofit: Retrofit = Retrofit.Builder()
         .client(okHttpClient)
