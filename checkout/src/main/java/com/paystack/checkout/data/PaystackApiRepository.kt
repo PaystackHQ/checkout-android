@@ -19,7 +19,7 @@ class PaystackApiRepository(private val paystackApi: PaystackApi) : PaystackRepo
             amount,
             currency,
         )
-        return runCatching { paystackApi.initializeTransaction(params) }
+        return runCatching { paystackApi.initializeTransaction(params.toMap()) }
             .map { TransactionResponseMapper.mapFromResponse(it) }
     }
 }
