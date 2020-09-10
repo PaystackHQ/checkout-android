@@ -52,12 +52,10 @@ class PaystackApiRepositoryTest {
         }
     }
 
-
     @Test
     fun initializeTransaction_whenTransactionInitSucceeds_returnsOkResult() {
         val paystackApiRepository = create()
         val params = TransactionParams(testPublicKey, testEmail, testAmount, testCurrency)
-
 
         testDispatcher.runBlockingTest {
 
