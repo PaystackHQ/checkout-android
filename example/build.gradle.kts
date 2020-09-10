@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     kotlin("android")
+    id("kotlin-android")
 }
 
 android {
@@ -15,6 +16,10 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildFeatures {
+        viewBinding = true
     }
 
     buildTypes {
@@ -41,6 +46,9 @@ dependencies {
     implementation(Libs.AndroidX.coreKtx)
     implementation(Libs.AndroidX.appcompat)
     implementation(project(":checkout"))
+    implementation("androidx.appcompat:appcompat:1.2.0")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:${rootProject.extra["kotlin_version"]}")
+    implementation("androidx.constraintlayout:constraintlayout:2.0.1")
 
     testImplementation(Libs.junit)
     testImplementation(Libs.mockitoKotlin)
