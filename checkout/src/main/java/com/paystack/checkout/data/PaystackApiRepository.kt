@@ -3,7 +3,6 @@ package com.paystack.checkout.data
 import com.github.michaelbull.result.map
 import com.github.michaelbull.result.runCatching
 import com.paystack.checkout.data.remote.PaystackApi
-import com.paystack.checkout.data.remote.TransactionInitResponse
 import com.paystack.checkout.data.remote.TransactionParams
 import com.paystack.checkout.model.Transaction
 
