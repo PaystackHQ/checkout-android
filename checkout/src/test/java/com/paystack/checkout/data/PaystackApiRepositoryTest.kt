@@ -13,6 +13,8 @@ import kotlinx.coroutines.test.runBlockingTest
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotEquals
+import org.junit.Assert.fail
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
@@ -69,10 +71,16 @@ class PaystackApiRepositoryTest {
             )
             assert(result is Ok)
             val transaction = result.get()
-            assertEquals(transaction?.email, testEmail)
-            assertEquals(transaction?.amount, testAmount)
-            assertEquals(transaction?.currency, testCurrency)
-            assertFalse(transaction?.accessCode == null)
+            if (transaction == null) {
+                fail()
+                return@runBlockingTest
+            }
+            assertEquals(transaction.email, testEmail)
+            assertEquals(transaction.amount, testAmount)
+            assertEquals(transaction.currency, testCurrency)
+            assert(transaction.accessCode.isNotEmpty())
+            assert(transaction.transactionStatus.isNotEmpty())
+            assertNotEquals(transaction.id, 0)
         }
     }
 
@@ -92,11 +100,7 @@ class PaystackApiRepositoryTest {
             amount = 10000L,
             currency = "NGN",
             email = testEmail,
-            merchantId = 109123,
-            merchantKey = testPublicKey,
-            merchantName = "Wayne Corp",
-            transactionStatus = "abandoned",
-            testMode = true
+            transactionStatus = "abandoned"
         )
     }
 }
