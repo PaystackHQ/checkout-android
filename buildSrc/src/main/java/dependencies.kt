@@ -1,5 +1,3 @@
-package com.paystack.checkout.buildsrc
-
 object Libs {
     const val androidGradlePlugin = "com.android.tools.build:gradle:4.1.0-rc02"
     const val kotlinResult = "com.michael-bull.kotlin-result:kotlin-result:1.1.9"
