@@ -12,7 +12,6 @@ import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.After
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotEquals
 import org.junit.Assert.fail
 import org.junit.Before
@@ -42,7 +41,7 @@ class PaystackApiRepositoryTest {
         val params = TransactionParams(testPublicKey, testEmail, testAmount, testCurrency)
 
         testDispatcher.runBlockingTest {
-            whenever(paystackApi.initializeTransaction(params)).thenReturn(transactionInitResponse)
+            whenever(paystackApi.initializeTransaction(params.toMap())).thenReturn(transactionInitResponse)
 
             paystackApiRepository.initializeTransaction(
                 testPublicKey,
@@ -50,7 +49,7 @@ class PaystackApiRepositoryTest {
                 testAmount,
                 testCurrency
             )
-            verify(paystackApi).initializeTransaction(params)
+            verify(paystackApi).initializeTransaction(params.toMap())
         }
     }
 
@@ -61,7 +60,7 @@ class PaystackApiRepositoryTest {
 
         testDispatcher.runBlockingTest {
 
-            whenever(paystackApi.initializeTransaction(params)).thenReturn(transactionInitResponse)
+            whenever(paystackApi.initializeTransaction(params.toMap())).thenReturn(transactionInitResponse)
 
             val result = paystackApiRepository.initializeTransaction(
                 testPublicKey,

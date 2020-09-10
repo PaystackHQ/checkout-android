@@ -10,4 +10,11 @@ data class TransactionParams(
     val email: String,
     val amount: Long,
     val currency: String,
-)
+) {
+    fun toMap() = mapOf(
+        "key" to key,
+        "email" to email,
+        "amount" to amount,
+        "currency" to currency,
+    )
+}
