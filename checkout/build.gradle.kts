@@ -1,6 +1,7 @@
 plugins {
     id("com.android.library")
     kotlin("android")
+    id("kotlin-android-extensions")
     kotlin("kapt")
 }
 
@@ -47,6 +48,8 @@ dependencies {
     implementation(Libs.Kotlin.stdlib)
     implementation(Libs.AndroidX.coreKtx)
     implementation(Libs.AndroidX.appcompat)
+    implementation(Libs.AndroidX.activity)
+    implementation(Libs.AndroidX.Lifecycle.common)
 
     implementation(Libs.Retrofit.retrofit)
     implementation(Libs.Retrofit.moshiConverter)

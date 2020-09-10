@@ -24,12 +24,13 @@ object Libs {
     }
 
     object AndroidX {
-        const val appcompat = "androidx.appcompat:appcompat:1.3.0-alpha01"
+        const val appcompat = "androidx.appcompat:appcompat:1.3.0-alpha02"
+        const val activity = "androidx.activity:activity-ktx:1.2.0-alpha08"
         const val coreKtx = "androidx.core:core-ktx:1.5.0-alpha02"
 
         object Lifecycle {
             private const val version = "2.2.0"
-            const val extensions = "androidx.lifecycle:lifecycle-extensions:$version"
+            const val common = "androidx.lifecycle:lifecycle-common-java8:$version"
             const val livedata = "androidx.lifecycle:lifecycle-livedata-ktx:$version"
             const val viewmodel = "androidx.lifecycle:lifecycle-viewmodel-ktx:$version"
         }
