@@ -1,5 +1,6 @@
-package com.paystack.checkout.data.remote
+package com.paystack.checkout.data.remote.di
 
+import com.paystack.checkout.data.remote.PaystackApi
 import com.squareup.moshi.Moshi
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -24,13 +25,13 @@ object ApiModule : ApiComponent {
         .addNetworkInterceptor(loggingInterceptor)
         .build()
 
-    override val moshi = Moshi.Builder().build()
+    override val moshi: Moshi = Moshi.Builder().build()
 
-    override val retrofit = Retrofit.Builder()
+    override val retrofit: Retrofit = Retrofit.Builder()
         .client(okHttpClient)
         .addConverterFactory(MoshiConverterFactory.create(moshi))
         .baseUrl("http://api.paystack.co")
         .build()
 
-    override val paystackApi = retrofit.create(PaystackApi::class.java)
+    override val paystackApi: PaystackApi = retrofit.create(PaystackApi::class.java)
 }
