@@ -9,4 +9,4 @@ data class ChargeParams(
     val email: String,
     val amount: Long,
     val currency: String,
-): Parcelable
+) : Parcelable

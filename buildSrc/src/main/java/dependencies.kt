@@ -8,6 +8,7 @@ object Libs {
 
     const val junit = "junit:junit:4.13"
     const val mockitoKotlin = "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
+    const val mockitoAndroid = "org.mockito:mockito-android:3.5.10"
 
     object Kotlin {
         private const val version = "1.4.0"
