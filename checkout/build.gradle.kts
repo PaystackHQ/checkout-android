@@ -19,6 +19,10 @@ android {
         consumerProguardFiles("consumer-rules.pro")
     }
 
+    buildFeatures {
+        viewBinding = true
+    }
+
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
@@ -46,10 +50,14 @@ android {
 
 dependencies {
     implementation(Libs.Kotlin.stdlib)
+
     implementation(Libs.AndroidX.coreKtx)
     implementation(Libs.AndroidX.appcompat)
     implementation(Libs.AndroidX.activity)
     implementation(Libs.AndroidX.Lifecycle.common)
+    implementation(Libs.AndroidX.Lifecycle.livedata)
+
+    implementation(Libs.constraintLayout)
 
     implementation(Libs.Retrofit.retrofit)
     implementation(Libs.Retrofit.moshiConverter)
