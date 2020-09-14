@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="pstkCheckout_window_background">#4D000000</color>
+    <color name="pstkCheckout_stack_green">#3BB75E</color>
+</resources>

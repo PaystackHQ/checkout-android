@@ -10,6 +10,8 @@ object Libs {
     const val mockitoKotlin = "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
     const val mockitoAndroid = "org.mockito:mockito-android:3.5.10"
 
+    const val constraintLayout = "androidx.constraintlayout:constraintlayout:2.0.0"
+
     object Kotlin {
         private const val version = "1.4.0"
         const val stdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$version"
