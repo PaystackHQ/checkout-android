@@ -33,7 +33,7 @@ object ApiModule : ApiComponent {
     override val retrofit: Retrofit = Retrofit.Builder()
         .client(okHttpClient)
         .addConverterFactory(MoshiConverterFactory.create(moshi))
-        .baseUrl("https://api.paystack.co")
+        .baseUrl("https://studio-api.paystack.co")
         .build()
 
     override val paystackApi: PaystackApi = retrofit.create(PaystackApi::class.java)

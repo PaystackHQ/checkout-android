@@ -54,6 +54,7 @@ dependencies {
     implementation(Libs.AndroidX.coreKtx)
     implementation(Libs.AndroidX.appcompat)
     implementation(Libs.AndroidX.activity)
+    implementation(Libs.AndroidX.webkit)
     implementation(Libs.AndroidX.Lifecycle.common)
     implementation(Libs.AndroidX.Lifecycle.livedata)
 
