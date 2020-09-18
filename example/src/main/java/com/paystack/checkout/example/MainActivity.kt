@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
                     Log.e(TAG, "Cancelled!")
                 }
             }
-            PaystackCheckout(this, "pk_test_5dc5329e757ef30cad09c61f19e911f059bdb474")
+            PaystackCheckout(this, "pk_live_3223432j3328nmdsad233tIshFeQd4XMUh")
                 .charge("ask4myk@gmail.com", 10000, "NGN", checkoutResultListener)
         }
     }

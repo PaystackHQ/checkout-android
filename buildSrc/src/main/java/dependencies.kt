@@ -30,6 +30,7 @@ object Libs {
         const val appcompat = "androidx.appcompat:appcompat:1.3.0-alpha02"
         const val activity = "androidx.activity:activity-ktx:1.2.0-alpha08"
         const val coreKtx = "androidx.core:core-ktx:1.5.0-alpha02"
+        const val webkit = "androidx.webkit:webkit:1.2.0"
 
         object Lifecycle {
             private const val version = "2.2.0"

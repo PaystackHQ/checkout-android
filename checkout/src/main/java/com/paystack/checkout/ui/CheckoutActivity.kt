@@ -1,10 +1,20 @@
 package com.paystack.checkout.ui
 
+import android.annotation.SuppressLint
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
+import android.view.WindowManager
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.webkit.WebMessageCompat
+import androidx.webkit.WebMessagePortCompat
+import androidx.webkit.WebViewCompat
+import androidx.webkit.WebViewFeature
+import com.paystack.checkout.BuildConfig
 import com.paystack.checkout.databinding.CheckoutActivityBinding
 import com.paystack.checkout.model.ChargeParams
 import com.paystack.checkout.ui.di.CheckoutContainer
@@ -18,17 +28,7 @@ class CheckoutActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        //TODO: Figure out entrance and exit animation
-
-        // with(window) {
-        //     requestFeature(Window.FEATURE_CONTENT_TRANSITIONS)
-        //
-        //     val fadeTransition = TransitionInflater.from(this@CheckoutActivity)
-        //         .inflateTransition(R.transition.fade)
-        //         .apply { duration = 300}
-        //     enterTransition = fadeTransition
-        //     exitTransition = fadeTransition
-        // }
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
         binding = CheckoutActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -37,7 +37,8 @@ class CheckoutActivity : AppCompatActivity() {
         viewModel.state.observe(this) { state ->
             val transaction = state.transaction?.readContent() ?: return@observe
 
-            val paymentUrl = "https://checkout.paystack.com/${transaction.accessCode}"
+            // val paymentUrl = "https://ee356cd88250.ngrok.io/${transaction.accessCode}"
+            val paymentUrl = "https://checkout-studio.paystack.com/${transaction.accessCode}"
             setupTransactionWebView(paymentUrl)
 
         }
@@ -45,22 +46,49 @@ class CheckoutActivity : AppCompatActivity() {
         viewModel.initializeTransaction(params)
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     private fun setupTransactionWebView(paymentUrl: String) {
-        val webView = binding.wbvTransaction
-        webView.settings.apply {
-            javaScriptEnabled = true
-            javaScriptCanOpenWindowsAutomatically = true
-            domStorageEnabled = true
+        if (!WebViewFeature.isFeatureSupported(WebViewFeature.CREATE_WEB_MESSAGE_CHANNEL)) {
+            //TODO: Finish with error result if web message channels aren't supported
+
+            return
         }
+
+        val webView = binding.wbvTransaction
+        WebView.setWebContentsDebuggingEnabled(BuildConfig.DEBUG)
+        // listenToWebEvents(webView)
         webView.apply {
+            settings.apply {
+                javaScriptEnabled = true
+                javaScriptCanOpenWindowsAutomatically = true
+                domStorageEnabled = true
+            }
             webViewClient = object : WebViewClient() {
-                override fun onPageFinished(view: WebView?, url: String?) {
+                override fun onPageFinished(view: WebView, url: String) {
                     super.onPageFinished(view, url)
+                    listenToWebEvents(view)
                     webView.isVisible = true
                 }
             }
             loadUrl(paymentUrl)
         }
+    }
+
+    @SuppressLint("RequiresFeature")
+    private fun listenToWebEvents(webView: WebView) {
+        val (receiver, sender) = WebViewCompat.createWebMessageChannel(webView)
+        receiver.setWebMessageCallback(object : WebMessagePortCompat.WebMessageCallbackCompat() {
+            override fun onMessage(port: WebMessagePortCompat, message: WebMessageCompat?) {
+                Log.e("HA", message?.data.orEmpty())
+
+                Toast.makeText(this@CheckoutActivity, message?.data, Toast.LENGTH_LONG).show()
+            }
+        })
+
+        val message = WebMessageCompat("""{"type": "init_port"}""", arrayOf(sender))
+        WebViewCompat.postWebMessage(webView, message, Uri.parse("*"))
+        // val initMessage  = WebMessageCompat("""{type: "init"}""", arrayOf(sender))
+        // WebViewCompat.postWebMessage(webView, initMessage, Uri.parse("*"))
     }
 
     // override fun onResume() {
