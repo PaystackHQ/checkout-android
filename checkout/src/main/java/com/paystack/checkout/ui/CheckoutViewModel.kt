@@ -20,7 +20,7 @@ class CheckoutViewModel(private val paystackRepository: PaystackRepository) : Vi
     val state: LiveData<CheckoutViewState>
         get() = _state.asLiveData()
 
-    private fun currentState() = _state.value
+    fun currentState() = _state.value
 
     fun initializeTransaction(params: ChargeParams) {
         viewModelScope.launch {

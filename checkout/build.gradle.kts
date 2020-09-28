@@ -68,6 +68,7 @@ dependencies {
     implementation(Libs.kotlinResult)
 
     implementation(Libs.Moshi.moshi)
+    implementation(Libs.Moshi.moshiAdapters)
     implementation(Libs.moshiLazyAdapters)
     kapt(Libs.Moshi.moshiCodegen)
 
@@ -77,6 +78,7 @@ dependencies {
 
     androidTestImplementation(Libs.mockitoKotlin)
     androidTestImplementation(Libs.mockitoAndroid)
+    androidTestImplementation(Libs.AndroidX.Test.core)
     androidTestImplementation(Libs.AndroidX.Test.Ext.junit)
     androidTestImplementation(Libs.AndroidX.Test.espressoCore)
 }

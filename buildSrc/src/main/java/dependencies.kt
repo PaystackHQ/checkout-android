@@ -1,5 +1,5 @@
 object Libs {
-    const val androidGradlePlugin = "com.android.tools.build:gradle:4.1.0-rc02"
+    const val androidGradlePlugin = "com.android.tools.build:gradle:4.1.0-rc03"
     const val kotlinResult = "com.michael-bull.kotlin-result:kotlin-result:1.1.9"
     const val ktlintGradlePlugin = "org.jlleitschuh.gradle:ktlint-gradle:9.4.0"
 

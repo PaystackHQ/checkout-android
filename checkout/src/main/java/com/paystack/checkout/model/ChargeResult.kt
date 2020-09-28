@@ -8,7 +8,7 @@ sealed class ChargeResult : Parcelable {
     data class Success(val transaction: Transaction) : ChargeResult()
 
     @Parcelize
-    data class Error(val transaction: Transaction ) : ChargeResult()
+    data class Error(val exception: Throwable, val transaction: Transaction?) : ChargeResult()
 
     @Parcelize
     object Cancelled : ChargeResult()

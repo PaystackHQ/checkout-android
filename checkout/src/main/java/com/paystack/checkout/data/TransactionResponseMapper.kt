@@ -12,7 +12,6 @@ object TransactionResponseMapper {
             amount = response.amount,
             currency = response.currency,
             email = response.email,
-            transactionStatus = response.transactionStatus
         )
     }
 }
