@@ -1,15 +1,16 @@
 package com.paystack.checkout.ui
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.WindowManager
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import androidx.webkit.WebMessageCompat
 import androidx.webkit.WebMessagePortCompat
 import androidx.webkit.WebViewCompat
@@ -17,7 +18,20 @@ import androidx.webkit.WebViewFeature
 import com.paystack.checkout.BuildConfig
 import com.paystack.checkout.databinding.CheckoutActivityBinding
 import com.paystack.checkout.model.ChargeParams
+import com.paystack.checkout.model.ChargeResult
+import com.paystack.checkout.model.CheckoutEvent
+import com.paystack.checkout.model.CheckoutEventType
+import com.paystack.checkout.model.Close
+import com.paystack.checkout.model.LoadedTransaction
+import com.paystack.checkout.model.Redirecting
+import com.paystack.checkout.model.Success
 import com.paystack.checkout.ui.di.CheckoutContainer
+import com.serjltt.moshi.adapters.Wrapped
+import com.squareup.moshi.JsonDataException
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.adapters.PolymorphicJsonAdapterFactory
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import kotlinx.coroutines.delay
 
 class CheckoutActivity : AppCompatActivity() {
     private lateinit var binding: CheckoutActivityBinding
@@ -76,41 +90,83 @@ class CheckoutActivity : AppCompatActivity() {
 
     @SuppressLint("RequiresFeature")
     private fun listenToWebEvents(webView: WebView) {
+        val eventAdapterFactory =
+            PolymorphicJsonAdapterFactory.of(CheckoutEvent::class.java, "event")
+                .withSubtype(Close::class.java, CheckoutEventType.close.value)
+                .withSubtype(Redirecting::class.java, CheckoutEventType.redirecting.value)
+                .withSubtype(LoadedTransaction::class.java, CheckoutEventType.loadedTransaction.value)
+                .withSubtype(Success::class.java, CheckoutEventType.success.value)
+        val eventAdapter = Moshi.Builder()
+            .add(eventAdapterFactory)
+            .add(KotlinJsonAdapterFactory())
+            .build()
+            .adapter(CheckoutEvent::class.java)
+
         val (receiver, sender) = WebViewCompat.createWebMessageChannel(webView)
         receiver.setWebMessageCallback(object : WebMessagePortCompat.WebMessageCallbackCompat() {
             override fun onMessage(port: WebMessagePortCompat, message: WebMessageCompat?) {
-                Log.e("HA", message?.data.orEmpty())
-
-                Toast.makeText(this@CheckoutActivity, message?.data, Toast.LENGTH_LONG).show()
+                val dataStr = message?.data ?: return
+                Log.i(TAG, dataStr)
+                try {
+                    val event = eventAdapter.fromJson(dataStr)
+                    event?.let { handleCheckoutEvent(it) }
+                } catch (e: JsonDataException) {
+                    Log.e(TAG, e.message, e)
+                }
             }
         })
 
         val message = WebMessageCompat("""{"type": "init_port"}""", arrayOf(sender))
         WebViewCompat.postWebMessage(webView, message, Uri.parse("*"))
-        // val initMessage  = WebMessageCompat("""{type: "init"}""", arrayOf(sender))
-        // WebViewCompat.postWebMessage(webView, initMessage, Uri.parse("*"))
     }
 
-    // override fun onResume() {
-    //     super.onResume()
-    //     lifecycleScope.launchWhenResumed {
-    //         delay(5000)
-    //         val intent = Intent().apply {
-    //             val transaction = Transaction(
-    //                 745857,
-    //                 "hfjfjsjbwu42y",
-    //                 30000,
-    //                 "NGN",
-    //                 "ask4myk@gmail.com",
-    //                 "successful"
-    //             )
-    //             putExtra(EXTRA_TRANSACTION_RESULT, transaction)
-    //         }
-    //         setResult(Activity.RESULT_OK, intent)
-    //     }
-    // }
+    private fun handleCheckoutEvent(checkoutEvent: CheckoutEvent) {
+        when (checkoutEvent) {
+            is Close -> {
+                val resultData = Intent()
+                resultData.putExtra(EXTRA_TRANSACTION_RESULT, ChargeResult.Cancelled)
+                setResult(RESULT_OK, resultData)
+                finish()
+            }
+            is Redirecting -> {
+                // Do nothing
+            }
+            is LoadedTransaction -> {
+                // Do nothing
+            }
+            is Success -> {
+                val transaction = viewModel.currentState().transaction?.peekContent()
+                if (transaction == null) {
+                    finishWithError(IllegalStateException("Transaction not found."))
+                    return
+                }
+
+                lifecycleScope.launchWhenCreated {
+                    val resultData = Intent().apply {
+                        val data = ChargeResult.Success(
+                            transaction.copy(reference = checkoutEvent.data.reference)
+                        )
+                        putExtra(EXTRA_TRANSACTION_RESULT, data)
+                    }
+                    setResult(RESULT_OK, resultData)
+                    // Delay for 1 second to allow checkout animation complete
+                    delay(1000)
+                    finish()
+                }
+            }
+        }
+    }
+
+    private fun finishWithError(exception: Throwable) {
+        val resultData = Intent().apply {
+            putExtra(EXTRA_TRANSACTION_RESULT, ChargeResult.Error(exception, null))
+        }
+        setResult(RESULT_OK, resultData)
+        finish()
+    }
 
     companion object {
+        private const val TAG = "CheckoutActivity"
         const val EXTRA_CHARGE_PARAMS = "charge_params"
         const val EXTRA_TRANSACTION_RESULT = "transaction_result"
     }

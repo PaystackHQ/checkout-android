@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
                     Log.e(TAG, "Transaction Success")
                 }
 
-                override fun onError(transaction: Transaction) {
+                override fun onError(exception: Throwable?, transaction: Transaction?) {
                     Log.e(TAG, "Transaction ERROR!!")
                 }
 
@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
                     Log.e(TAG, "Cancelled!")
                 }
             }
-            PaystackCheckout(this, "pk_live_3223432j3328nmdsad233tIshFeQd4XMUh")
+            PaystackCheckout(this, "pk_test_d8a7e69bada4d0a25d0e62b571b259208c9f4328")
                 .charge("ask4myk@gmail.com", 10000, "NGN", checkoutResultListener)
         }
     }

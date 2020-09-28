@@ -17,19 +17,37 @@ class PaystackCheckout {
         this.publicKey = publicKey
     }
 
-    constructor(activity: AppCompatActivity, publicKey: String, activityResultRegistry: ActivityResultRegistry) {
+    constructor(
+        activity: AppCompatActivity,
+        publicKey: String,
+        activityResultRegistry: ActivityResultRegistry
+    ) {
         this.activity = activity
         this.activityResultRegistry = activityResultRegistry
         this.publicKey = publicKey
     }
 
-    fun charge(email: String, amount: Long, currency: String, resultListener: CheckoutResultListener) {
+    fun charge(
+        email: String,
+        amount: Long,
+        currency: String,
+        resultListener: CheckoutResultListener
+    ) {
         val params = ChargeParams(publicKey, email, amount, currency)
-        activity.registerForActivityResult(PayWithCheckout(), activityResultRegistry) { chargeResult ->
+        activity.registerForActivityResult(
+            PayWithCheckout(),
+            activityResultRegistry
+        ) { chargeResult ->
             when (chargeResult) {
-                is ChargeResult.Success -> resultListener.onSuccess(chargeResult.transaction)
-                is ChargeResult.Error -> resultListener.onError(chargeResult.transaction)
-                ChargeResult.Cancelled -> resultListener.onCancelled()
+                is ChargeResult.Success -> {
+                    resultListener.onSuccess(chargeResult.transaction)
+                }
+                is ChargeResult.Error -> {
+                    resultListener.onError(chargeResult.exception, chargeResult.transaction)
+                }
+                ChargeResult.Cancelled -> {
+                    resultListener.onCancelled()
+                }
             }
         }.launch(params)
     }
