@@ -1,10 +1,14 @@
 package com.paystack.checkout
 
+import android.content.Context
+import android.content.Intent
 import androidx.activity.result.ActivityResultRegistry
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.core.app.ActivityOptionsCompat
 import androidx.test.core.app.ActivityScenario
+import androidx.test.core.app.ApplicationProvider
 import com.nhaarman.mockitokotlin2.verify
+import com.paystack.checkout.model.ChargeParams
 import com.paystack.checkout.model.ChargeResult
 import com.paystack.checkout.model.Transaction
 import com.paystack.checkout.ui.CheckoutActivity
@@ -14,6 +18,9 @@ import org.mockito.Mock
 import org.mockito.MockitoAnnotations
 
 class PaystackCheckoutTest {
+
+    private val applicationContext: Context
+        get() = ApplicationProvider.getApplicationContext()
 
     @Mock
     lateinit var resultListener: CheckoutResultListener
@@ -25,42 +32,57 @@ class PaystackCheckoutTest {
 
     @Test
     fun charge_whenChargeIsSuccessful_invokesResultListenerOnSuccess() {
-        ActivityScenario.launch(CheckoutActivity::class.java).use { scenario ->
+        val intent = Intent(applicationContext, CheckoutActivity::class.java).apply {
+            putExtra(CheckoutActivity.EXTRA_CHARGE_PARAMS, TEST_CHARGE_PARAMS)
+        }
+        ActivityScenario.launch<CheckoutActivity>(intent).use { scenario ->
             scenario.onActivity { activity ->
-                val chargeResult = ChargeResult.Success(SUCCESSFUL_TRANSACTION)
+                val chargeResult = ChargeResult.Success(TEST_SUCCESSFUL_TRANSACTION)
                 val testRegistry = getTestResultRegistry(chargeResult)
-                val paystackCheckout =
-                    PaystackCheckout(activity, "pk_test_1234568695", testRegistry)
-                paystackCheckout.charge(TEST_EMAIL, 10000, "NGN", resultListener)
+                val paystackCheckout = PaystackCheckout.Builder(activity, TEST_EMAIL, 10000L, "NGN")
+                    .activityResultRegistry(testRegistry)
+                    .publicKey(TEST_CHARGE_PARAMS.publicKey)
+                    .build()
+                paystackCheckout.charge(resultListener)
 
-                verify(resultListener).onSuccess(SUCCESSFUL_TRANSACTION)
+                verify(resultListener).onSuccess(TEST_SUCCESSFUL_TRANSACTION)
             }
         }
     }
 
     @Test
     fun charge_whenChargeFails_invokesResultListenerOnError() {
-        ActivityScenario.launch(CheckoutActivity::class.java).use { scenario ->
+        val intent = Intent(applicationContext, CheckoutActivity::class.java).apply {
+            putExtra(CheckoutActivity.EXTRA_CHARGE_PARAMS, TEST_CHARGE_PARAMS)
+        }
+        ActivityScenario.launch<CheckoutActivity>(intent).use { scenario ->
             scenario.onActivity { activity ->
-                val chargeResult = ChargeResult.Error(IllegalStateException(), FAILED_TRANSACTION)
+                val chargeResult = ChargeResult.Error(IllegalStateException())
                 val testRegistry = getTestResultRegistry(chargeResult)
-                val paystackCheckout =
-                    PaystackCheckout(activity, "pk_test_1234568695", testRegistry)
-                paystackCheckout.charge(TEST_EMAIL, 10000, "NGN", resultListener)
+                val paystackCheckout = PaystackCheckout.Builder(activity, TEST_EMAIL, 10000L, "NGN")
+                    .activityResultRegistry(testRegistry)
+                    .publicKey(TEST_CHARGE_PARAMS.publicKey)
+                    .build()
+                paystackCheckout.charge(resultListener)
 
-                verify(resultListener).onError(IllegalStateException(), FAILED_TRANSACTION)
+                verify(resultListener).onError(chargeResult.exception)
             }
         }
     }
 
     @Test
     fun charge_whenCheckoutIsCancelled_invokesResultListenerOnCancelled() {
-        ActivityScenario.launch(CheckoutActivity::class.java).use { scenario ->
+        val intent = Intent(applicationContext, CheckoutActivity::class.java).apply {
+            putExtra(CheckoutActivity.EXTRA_CHARGE_PARAMS, TEST_CHARGE_PARAMS)
+        }
+        ActivityScenario.launch<CheckoutActivity>(intent).use { scenario ->
             scenario.onActivity { activity ->
                 val testRegistry = getTestResultRegistry(ChargeResult.Cancelled)
-                val paystackCheckout =
-                    PaystackCheckout(activity, "pk_test_1234568695", testRegistry)
-                paystackCheckout.charge(TEST_EMAIL, 10000, "NGN", resultListener)
+                val paystackCheckout = PaystackCheckout.Builder(activity, TEST_EMAIL, 10000L, "NGN")
+                    .activityResultRegistry(testRegistry)
+                    .publicKey(TEST_CHARGE_PARAMS.publicKey)
+                    .build()
+                paystackCheckout.charge(resultListener)
 
                 verify(resultListener).onCancelled()
             }
@@ -83,19 +105,14 @@ class PaystackCheckoutTest {
     companion object {
         const val TEST_EMAIL = "michael@paystack.com"
 
-        val FAILED_TRANSACTION = Transaction(
-            id = 1000,
-            accessCode = "failed_access",
-            amount = 10000,
-            currency = "NGN",
-            email = TEST_EMAIL,
-        )
-        val SUCCESSFUL_TRANSACTION = Transaction(
+        val TEST_SUCCESSFUL_TRANSACTION = Transaction(
             id = 1001,
             accessCode = "successful_access",
             amount = 10000,
             currency = "NGN",
             email = TEST_EMAIL,
         )
+
+        val TEST_CHARGE_PARAMS = ChargeParams("pk_test_test_key_value", TEST_EMAIL, 10000L, "NGN")
     }
 }

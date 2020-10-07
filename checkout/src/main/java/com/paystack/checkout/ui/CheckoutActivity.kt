@@ -10,32 +10,29 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import androidx.lifecycle.lifecycleScope
 import androidx.webkit.WebMessageCompat
 import androidx.webkit.WebMessagePortCompat
 import androidx.webkit.WebViewCompat
 import androidx.webkit.WebViewFeature
-import com.paystack.checkout.BuildConfig
 import com.paystack.checkout.databinding.CheckoutActivityBinding
 import com.paystack.checkout.model.ChargeParams
 import com.paystack.checkout.model.ChargeResult
 import com.paystack.checkout.model.CheckoutEvent
 import com.paystack.checkout.model.CheckoutEventType
-import com.paystack.checkout.model.Close
-import com.paystack.checkout.model.LoadedTransaction
-import com.paystack.checkout.model.Redirecting
-import com.paystack.checkout.model.Success
+import com.paystack.checkout.model.CloseEvent
+import com.paystack.checkout.model.ErrorEvent
+import com.paystack.checkout.model.LoadedTransactionEvent
+import com.paystack.checkout.model.RedirectingEvent
+import com.paystack.checkout.model.SuccessEvent
 import com.paystack.checkout.ui.di.CheckoutContainer
-import com.serjltt.moshi.adapters.Wrapped
 import com.squareup.moshi.JsonDataException
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.adapters.PolymorphicJsonAdapterFactory
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import kotlinx.coroutines.delay
 
 class CheckoutActivity : AppCompatActivity() {
     private lateinit var binding: CheckoutActivityBinding
-    private val viewModel by lazy {
+    private val viewModel: CheckoutViewModel by lazy {
         CheckoutContainer.checkoutViewModelFactory.create()
     }
 
@@ -43,18 +40,22 @@ class CheckoutActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-
         binding = CheckoutActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         val params = intent.getParcelableExtra<ChargeParams>(EXTRA_CHARGE_PARAMS)
             ?: error("Charge parameters not found")
         viewModel.state.observe(this) { state ->
-            val transaction = state.transaction?.readContent() ?: return@observe
+            val errorOccurred = state.initError?.consumeIfAvailable { exception ->
+                handleCheckoutEvent(ErrorEvent(exception))
+            } ?: false
 
-            // val paymentUrl = "https://ee356cd88250.ngrok.io/${transaction.accessCode}"
-            val paymentUrl = "https://checkout-studio.paystack.com/${transaction.accessCode}"
-            setupTransactionWebView(paymentUrl)
+            if (errorOccurred) return@observe
 
+            state.transaction?.consumeIfAvailable { transaction ->
+                val paymentUrl = "https://checkout-studio.paystack.com/${transaction.accessCode}"
+                setupTransactionWebView(paymentUrl)
+            }
         }
 
         viewModel.initializeTransaction(params)
@@ -69,33 +70,32 @@ class CheckoutActivity : AppCompatActivity() {
         }
 
         val webView = binding.wbvTransaction
-        WebView.setWebContentsDebuggingEnabled(BuildConfig.DEBUG)
-        // listenToWebEvents(webView)
-        webView.apply {
-            settings.apply {
-                javaScriptEnabled = true
-                javaScriptCanOpenWindowsAutomatically = true
-                domStorageEnabled = true
-            }
-            webViewClient = object : WebViewClient() {
-                override fun onPageFinished(view: WebView, url: String) {
-                    super.onPageFinished(view, url)
-                    listenToWebEvents(view)
-                    webView.isVisible = true
-                }
-            }
-            loadUrl(paymentUrl)
+        webView.settings.apply {
+            javaScriptEnabled = true
+            javaScriptCanOpenWindowsAutomatically = true
+            domStorageEnabled = true
         }
+        webView.webViewClient = object : WebViewClient() {
+            override fun onPageFinished(view: WebView, url: String) {
+                super.onPageFinished(view, url)
+                listenToWebEvents(view)
+                webView.isVisible = true
+            }
+        }
+        webView.loadUrl(paymentUrl)
     }
 
     @SuppressLint("RequiresFeature")
     private fun listenToWebEvents(webView: WebView) {
         val eventAdapterFactory =
             PolymorphicJsonAdapterFactory.of(CheckoutEvent::class.java, "event")
-                .withSubtype(Close::class.java, CheckoutEventType.close.value)
-                .withSubtype(Redirecting::class.java, CheckoutEventType.redirecting.value)
-                .withSubtype(LoadedTransaction::class.java, CheckoutEventType.loadedTransaction.value)
-                .withSubtype(Success::class.java, CheckoutEventType.success.value)
+                .withSubtype(CloseEvent::class.java, CheckoutEventType.close.value)
+                .withSubtype(RedirectingEvent::class.java, CheckoutEventType.redirecting.value)
+                .withSubtype(
+                    LoadedTransactionEvent::class.java,
+                    CheckoutEventType.loadedTransaction.value
+                )
+                .withSubtype(SuccessEvent::class.java, CheckoutEventType.success.value)
         val eventAdapter = Moshi.Builder()
             .add(eventAdapterFactory)
             .add(KotlinJsonAdapterFactory())
@@ -122,47 +122,35 @@ class CheckoutActivity : AppCompatActivity() {
 
     private fun handleCheckoutEvent(checkoutEvent: CheckoutEvent) {
         when (checkoutEvent) {
-            is Close -> {
-                val resultData = Intent()
-                resultData.putExtra(EXTRA_TRANSACTION_RESULT, ChargeResult.Cancelled)
-                setResult(RESULT_OK, resultData)
-                finish()
-            }
-            is Redirecting -> {
-                // Do nothing
-            }
-            is LoadedTransaction -> {
-                // Do nothing
-            }
-            is Success -> {
+            is CloseEvent -> closeWithResult(ChargeResult.Cancelled)
+
+            is SuccessEvent -> {
                 val transaction = viewModel.currentState().transaction?.peekContent()
                 if (transaction == null) {
-                    finishWithError(IllegalStateException("Transaction not found."))
+                    closeWithError(IllegalStateException("Transaction not found."))
                     return
                 }
 
-                lifecycleScope.launchWhenCreated {
-                    val resultData = Intent().apply {
-                        val data = ChargeResult.Success(
-                            transaction.copy(reference = checkoutEvent.data.reference)
-                        )
-                        putExtra(EXTRA_TRANSACTION_RESULT, data)
-                    }
-                    setResult(RESULT_OK, resultData)
-                    // Delay for 1 second to allow checkout animation complete
-                    delay(1000)
-                    finish()
-                }
+                val transactionReference = checkoutEvent.data.reference
+                val data = ChargeResult.Success(transaction.copy(reference = transactionReference))
+                closeWithResult(data)
             }
+
+            is ErrorEvent -> closeWithError(checkoutEvent.exception)
+
+            else -> Log.d(TAG, checkoutEvent.toString())
         }
     }
 
-    private fun finishWithError(exception: Throwable) {
-        val resultData = Intent().apply {
-            putExtra(EXTRA_TRANSACTION_RESULT, ChargeResult.Error(exception, null))
-        }
+    private fun closeWithResult(data: ChargeResult) {
+        val resultData = Intent()
+        resultData.putExtra(EXTRA_TRANSACTION_RESULT, data)
         setResult(RESULT_OK, resultData)
         finish()
+    }
+
+    private fun closeWithError(exception: Throwable) {
+        closeWithResult(ChargeResult.Error(exception))
     }
 
     companion object {

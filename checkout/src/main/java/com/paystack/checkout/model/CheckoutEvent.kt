@@ -1,7 +1,5 @@
 package com.paystack.checkout.model
 
-import com.serjltt.moshi.adapters.Wrapped
-import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 enum class CheckoutEventType(val value: String) {
@@ -13,8 +11,9 @@ enum class CheckoutEventType(val value: String) {
 
 sealed class CheckoutEvent
 
-class Close : CheckoutEvent()
-class Redirecting : CheckoutEvent()
+class CloseEvent : CheckoutEvent()
+class RedirectingEvent : CheckoutEvent()
+class ErrorEvent(val exception: Throwable): CheckoutEvent()
 @JsonClass(generateAdapter = true)
-data class Success(val data: SuccessEventData): CheckoutEvent()
-class LoadedTransaction : CheckoutEvent()
+data class SuccessEvent(val data: SuccessEventData) : CheckoutEvent()
+class LoadedTransactionEvent : CheckoutEvent()
