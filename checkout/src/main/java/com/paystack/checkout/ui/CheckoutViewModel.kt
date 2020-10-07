@@ -4,12 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Ok
 import com.paystack.checkout.data.PaystackRepository
 import com.paystack.checkout.di.Factory
 import com.paystack.checkout.model.ChargeParams
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
@@ -25,24 +25,17 @@ class CheckoutViewModel(private val paystackRepository: PaystackRepository) : Vi
     fun initializeTransaction(params: ChargeParams) {
         viewModelScope.launch {
             _state.value = currentState().copy(isLoading = true)
-            delay(3000)
-            val result = paystackRepository.initializeTransaction(
-                params.publicKey,
-                params.email,
-                params.amount,
-                params.currency
-            )
-            when (result) {
+            when (val result = paystackRepository.initializeTransaction(params)) {
                 is Ok -> {
                     _state.value = currentState().copy(
                         isLoading = false,
                         transaction = Consumable(result.value)
                     )
                 }
-                else -> {
+                is Err -> {
                     _state.value = currentState().copy(
                         isLoading = false,
-                        //TODO: Error handling
+                        initError = Consumable(result.error)
                     )
                 }
             }

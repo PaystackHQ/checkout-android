@@ -6,7 +6,7 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.paystack.checkout.data.remote.PaystackApi
 import com.paystack.checkout.data.remote.TransactionInitResponse
-import com.paystack.checkout.data.remote.TransactionParams
+import com.paystack.checkout.data.remote.TransactionInitRequestParams
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.runBlockingTest
@@ -38,17 +38,14 @@ class PaystackApiRepositoryTest {
     @Test
     fun initializeTransaction_whenInvokedWithParameters_callsPaystackApiWithCorrectData() {
         val paystackApiRepository = create()
-        val params = TransactionParams(testPublicKey, testEmail, testAmount, testCurrency)
+        val params = TransactionInitRequestParams(testPublicKey, testEmail, testAmount, testCurrency)
 
         testDispatcher.runBlockingTest {
-            whenever(paystackApi.initializeTransaction(params.toMap())).thenReturn(transactionInitResponse)
-
-            paystackApiRepository.initializeTransaction(
-                testPublicKey,
-                testEmail,
-                testAmount,
-                testCurrency
+            whenever(paystackApi.initializeTransaction(params.toMap())).thenReturn(
+                transactionInitResponse
             )
+
+            paystackApiRepository.initializeTransaction(params)
             verify(paystackApi).initializeTransaction(params.toMap())
         }
     }
@@ -56,18 +53,15 @@ class PaystackApiRepositoryTest {
     @Test
     fun initializeTransaction_whenTransactionInitSucceeds_returnsOkResult() {
         val paystackApiRepository = create()
-        val params = TransactionParams(testPublicKey, testEmail, testAmount, testCurrency)
+        val params = TransactionInitRequestParams(testPublicKey, testEmail, testAmount, testCurrency)
 
         testDispatcher.runBlockingTest {
 
-            whenever(paystackApi.initializeTransaction(params.toMap())).thenReturn(transactionInitResponse)
-
-            val result = paystackApiRepository.initializeTransaction(
-                testPublicKey,
-                testEmail,
-                testAmount,
-                testCurrency
+            whenever(paystackApi.initializeTransaction(params.toMap())).thenReturn(
+                transactionInitResponse
             )
+
+            val result = paystackApiRepository.initializeTransaction(params)
             assert(result is Ok)
             val transaction = result.get()
             if (transaction == null) {
@@ -78,7 +72,6 @@ class PaystackApiRepositoryTest {
             assertEquals(transaction.amount, testAmount)
             assertEquals(transaction.currency, testCurrency)
             assert(transaction.accessCode.isNotEmpty())
-            assert(transaction.transactionStatus.isNotEmpty())
             assertNotEquals(transaction.id, 0)
         }
     }
