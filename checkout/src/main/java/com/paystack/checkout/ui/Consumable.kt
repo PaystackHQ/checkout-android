@@ -3,7 +3,7 @@ package com.paystack.checkout.ui
 /**
  * Wrapper for an object that should be read only once
  * */
-class Consumable<out T>(private val content: T) {
+internal class Consumable<out T>(private val content: T) {
 
     var hasBeenRead = false
         private set

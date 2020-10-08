@@ -6,7 +6,7 @@ import com.squareup.moshi.JsonClass
 
 @Keep
 @JsonClass(generateAdapter = true)
-data class TransactionInitResponse(
+internal data class TransactionInitResponse(
     val status: String,
     val message: String,
     val id: Int,

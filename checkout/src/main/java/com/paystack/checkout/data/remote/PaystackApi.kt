@@ -6,7 +6,7 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 import retrofit2.http.QueryMap
 
-interface PaystackApi {
+internal interface PaystackApi {
 
     @GET("/checkout/request_inline")
     @Wrapped(path = ["data"])

@@ -3,7 +3,7 @@ package com.paystack.checkout.data
 import com.paystack.checkout.data.remote.TransactionInitResponse
 import com.paystack.checkout.model.Transaction
 
-object TransactionResponseMapper {
+internal object TransactionResponseMapper {
 
     fun mapFromResponse(response: TransactionInitResponse): Transaction {
         return Transaction(

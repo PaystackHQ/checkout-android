@@ -8,9 +8,9 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 
-fun apiComponent(): ApiComponent = ApiModule
+internal fun apiComponent(): ApiComponent = ApiModule
 
-interface ApiComponent {
+internal interface ApiComponent {
     val loggingInterceptor: HttpLoggingInterceptor
     val okHttpClient: OkHttpClient
     val moshi: Moshi
@@ -18,7 +18,7 @@ interface ApiComponent {
     val paystackApi: PaystackApi
 }
 
-object ApiModule : ApiComponent {
+internal object ApiModule : ApiComponent {
     override val loggingInterceptor = HttpLoggingInterceptor()
         .setLevel(HttpLoggingInterceptor.Level.BODY)
 

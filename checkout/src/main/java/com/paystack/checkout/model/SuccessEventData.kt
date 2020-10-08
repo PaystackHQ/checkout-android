@@ -5,7 +5,7 @@ import com.squareup.moshi.JsonClass
 
 @Keep
 @JsonClass(generateAdapter = true)
-data class SuccessEventData(
+internal data class SuccessEventData(
     val reference: String,
     val status: String
 )
