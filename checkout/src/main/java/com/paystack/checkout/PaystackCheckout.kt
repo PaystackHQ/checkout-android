@@ -202,6 +202,6 @@ class PaystackCheckout private constructor(
     }
 
     companion object {
-        const val KEY_PUBLIC_KEY_PROP = "co.paystack.android.PublicKey"
+        const val KEY_PUBLIC_KEY_PROP = "com.paystack.checkout.PublicKey"
     }
 }

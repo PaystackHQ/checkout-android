@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class CheckoutViewModel(private val paystackRepository: PaystackRepository) : ViewModel() {
+internal class CheckoutViewModel(private val paystackRepository: PaystackRepository) : ViewModel() {
 
     private val _state = MutableStateFlow(CheckoutViewState())
     val state: LiveData<CheckoutViewState>

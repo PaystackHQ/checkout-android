@@ -30,7 +30,7 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.adapters.PolymorphicJsonAdapterFactory
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 
-class CheckoutActivity : AppCompatActivity() {
+internal class CheckoutActivity : AppCompatActivity() {
     private lateinit var binding: CheckoutActivityBinding
     private val viewModel: CheckoutViewModel by lazy {
         CheckoutContainer.checkoutViewModelFactory.create()

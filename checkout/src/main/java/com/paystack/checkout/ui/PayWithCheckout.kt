@@ -7,7 +7,7 @@ import androidx.activity.result.contract.ActivityResultContract
 import com.paystack.checkout.model.ChargeParams
 import com.paystack.checkout.model.ChargeResult
 
-class PayWithCheckout : ActivityResultContract<ChargeParams, ChargeResult>() {
+internal class PayWithCheckout : ActivityResultContract<ChargeParams, ChargeResult>() {
     override fun createIntent(context: Context, input: ChargeParams?): Intent {
         return Intent(context, CheckoutActivity::class.java).apply {
             putExtra(CheckoutActivity.EXTRA_CHARGE_PARAMS, input)
