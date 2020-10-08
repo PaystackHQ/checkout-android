@@ -49,8 +49,8 @@ val email = "example@example.com"
 val amount = 10000L
 val currency = "NGN"
 PaystackCheckout.Builder(activity, email, amount, currency)
-	.build()
-	.charge(checkoutResultListener)
+    .build()
+    .charge(checkoutResultListener)
 ```
 
 ## Security
