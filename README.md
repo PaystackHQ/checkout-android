@@ -53,6 +53,33 @@ PaystackCheckout.Builder(activity, email, amount, currency)
     .charge(checkoutResultListener)
 ```
 
+In Java
+
+```java
+CheckoutResultListener resultListener = new CheckoutResultListener() {
+    @Override
+    public void onSuccess(@NonNull Transaction transaction) {
+        // Executed when transaction is successful
+    }
+
+    @Override
+    public void onError(@NonNull Throwable exception) {
+        // Executed when an error occurs
+    }
+
+    @Override
+    public void onCancelled() {
+        // Executed when the user cancels the payment process
+    }
+};
+String email = "example@example.com";
+long amount = 10000;
+String currency = "NGN";
+PaystackCheckout checkout = new PaystackCheckout.Builder(activity, email,amount, currency)
+    .build();
+checkout.charge(resultListener);
+```
+
 ## Security
 
 If you believe you’ve discovered a bug, kindly get in in touch with the Paystack Security team at [security@paystack.com](mailto:%22security@paystack.com).
