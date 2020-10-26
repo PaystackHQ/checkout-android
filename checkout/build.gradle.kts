@@ -1,8 +1,13 @@
+import com.github.panpf.bintray.publish.PublishExtension
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     id("com.android.library")
     kotlin("android")
     id("kotlin-android-extensions")
     kotlin("kapt")
+    id("com.github.panpf.bintray-publish")
 }
 
 android {
@@ -81,4 +86,21 @@ dependencies {
     androidTestImplementation(Libs.AndroidX.Test.core)
     androidTestImplementation(Libs.AndroidX.Test.Ext.junit)
     androidTestImplementation(Libs.AndroidX.Test.espressoCore)
+}
+
+configure<PublishExtension> {
+    userOrg = "paystack"
+    groupId = "com.paystack"
+    artifactId = "checkout-android"
+    publishVersion = "0.1.0-alpha"
+    desc = "Paystack Checkout SDK for Android"
+    website = "https://github.com/PaystackHQ/checkout-android"
+
+    val prop = Properties()
+    val fis = FileInputStream(project.rootProject.file("local.properties"))
+    prop.load(fis)
+
+    bintrayUser = prop.getProperty("bintray.user")
+    bintrayKey = prop.getProperty("bintray.apikey")
+    dryRun = false
 }

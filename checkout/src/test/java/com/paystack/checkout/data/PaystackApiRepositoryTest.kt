@@ -21,7 +21,7 @@ import org.mockito.Mock
 import org.mockito.MockitoAnnotations
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class PaystackApiRepositoryTest {
+internal class PaystackApiRepositoryTest {
     private val testDispatcher = TestCoroutineDispatcher()
 
     @Mock
