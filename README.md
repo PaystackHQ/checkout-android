@@ -1,5 +1,5 @@
 # Paystack Checkout Android
-
+[ ![Download](https://api.bintray.com/packages/paystack/maven/checkout-android/images/download.svg) ](https://bintray.com/paystack/maven/checkout-android/_latestVersion)
 ## Requirements
 
 - Android 5.0+ (API 21+)
@@ -13,7 +13,23 @@ Add `checkout-android` to the dependencies in your app level `build.gradle` file
 
 ```groovy
 dependencies {
-    implementation 'com.paystack:checkout-android:0.1.0'
+    implementation 'com.paystack:checkout-android:0.1.0-alpha02'
+}
+```
+
+You should also add Java 8 support in your build.gradle:
+```groovy
+android {
+    // ... Other configuration code
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    // For kotlin codebases, include
+    kotlinOptions {
+         jvmTarget = "1.8"
+    }
 }
 ```
 

@@ -3,7 +3,8 @@ object Libs {
     const val kotlinResult = "com.michael-bull.kotlin-result:kotlin-result:1.1.9"
     const val ktlintGradlePlugin = "org.jlleitschuh.gradle:ktlint-gradle:9.4.0"
 
-    const val bintrayReleasePlugin = "com.github.panpf.bintray-publish:bintray-publish:1.0.0"
+    const val bintrayPlugin = "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4"
+    const val androidMavenPlugin = "com.github.dcendents:android-maven-gradle-plugin:2.1"
 
     const val moshiLazyAdapters = "com.serjltt.moshi:moshi-lazy-adapters:2.2"
 

@@ -17,7 +17,7 @@ import org.junit.Test
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
 
-class PaystackCheckoutTest {
+internal class PaystackCheckoutTest {
 
     private val applicationContext: Context
         get() = ApplicationProvider.getApplicationContext()

@@ -1,2 +1,2 @@
 include(":javaexample")
-include(":checkout", ":example")
+include(":checkout-android", ":example")
