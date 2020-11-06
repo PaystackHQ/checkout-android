@@ -13,7 +13,7 @@ Add `checkout-android` to the dependencies in your app level `build.gradle` file
 
 ```groovy
 dependencies {
-    implementation 'com.paystack:checkout-android:0.1.0-alpha02'
+    implementation 'com.paystack.checkout:checkout-android:0.1.0-alpha02'
 }
 ```
 
