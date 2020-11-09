@@ -89,7 +89,7 @@ dependencies {
 }
 
 extra.apply {
-    set("libraryVersion", "0.1.0-alpha02")
+    set("libraryVersion", "0.1.0-alpha03")
 
     set("bintrayRepo", "maven")
     set("bintrayName", "com.paystack.checkout")
