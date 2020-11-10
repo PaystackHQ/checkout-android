@@ -89,10 +89,10 @@ dependencies {
 }
 
 extra.apply {
-    set("libraryVersion", "0.1.0-alpha03")
+    set("libraryVersion", "0.1.0-alpha04")
 
     set("bintrayRepo", "maven")
-    set("bintrayName", "com.paystack.checkout")
+    set("bintrayName", "checkout-android")
 
     set("publishedGroupId", "com.paystack.checkout")
     set("libraryName", "checkout-android")     // this is the module name of library

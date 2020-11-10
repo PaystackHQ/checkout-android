@@ -53,7 +53,7 @@ internal class CheckoutActivity : AppCompatActivity() {
             if (errorOccurred) return@observe
 
             state.transaction?.consumeIfAvailable { transaction ->
-                val paymentUrl = "https://checkout-studio.paystack.com/${transaction.accessCode}"
+                val paymentUrl = "https://checkout.paystack.com/${transaction.accessCode}"
                 setupTransactionWebView(paymentUrl)
             }
         }
