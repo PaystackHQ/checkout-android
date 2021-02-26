@@ -49,7 +49,7 @@ internal data class ChargeParams(
             "plan" to plan,
             "subAccount" to subAccount,
             "customerCode" to customerCode,
-            "reference" to reference,
+            "ref" to reference,
             "paymentPage" to paymentPage,
             "paymentRequest" to paymentRequest,
             "bearer" to bearer,
