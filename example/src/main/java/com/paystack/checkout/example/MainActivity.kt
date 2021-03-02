@@ -9,6 +9,7 @@ import com.paystack.checkout.PaystackCheckout
 import com.paystack.checkout.example.databinding.MainActivityBinding
 import com.paystack.checkout.model.PaymentChannel
 import com.paystack.checkout.model.Transaction
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: MainActivityBinding
@@ -50,12 +51,25 @@ class MainActivity : AppCompatActivity() {
                 Log.e(TAG, "Cancelled!")
             }
         }
-        val checkoutBuilder = PaystackCheckout.Builder(this, "ask4myk@gmail.com", 10000, "NGN")
+
+        val metadata = """{
+            "age": "50",
+            "custom_fields": [
+                {
+                    "display_name": "Brand",
+                    "variable_name": "brand",
+                    "value": "Bongo Kivu"
+                }
+            ]
+        }""".trimIndent()
+
+        println(metadata)
+
+        val checkoutBuilder = PaystackCheckout.Builder(this, "again@week.com",
+                50000, "NGN")
         checkoutBuilder.apply {
-            firstName("Michael")
-            lastName("Michael")
-            channels(PaymentChannel.bank, PaymentChannel.qr, PaymentChannel.card)
-            phone("07019133867")
+            reference("lezzGoLIvEagAIn41")
+            metadata(metadata)
         }
         val checkout = checkoutBuilder.build()
         checkout.charge(checkoutResultListener)

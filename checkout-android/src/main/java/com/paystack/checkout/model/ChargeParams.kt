@@ -8,25 +8,22 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 internal data class ChargeParams(
-    val publicKey: String,
-    val email: String,
-    val amount: Long,
-    val currency: String,
-    val channels: List<PaymentChannel>? = null,
-    val firstName: String? = null,
-    val lastName: String? = null,
-    val phone: String? = null,
-    val plan: String? = null,
-    val subAccount: String? = null,
-    val customerCode: String? = null,
-    val reference: String? = null,
-    val paymentPage: String? = null,
-    val paymentRequest: String? = null,
-    val bearer: String? = null,
-    val metadata: String? = null,
-    val transactionCharge: Long? = null,
-    val orderId: Long? = null,
-) : Parcelable {
+        val publicKey: String,
+        val email: String,
+        val amount: Long,
+        val currency: String,
+        val channels: List<PaymentChannel>? = null,
+        val phone: String? = null,
+        val label: String? = null,
+        val reference: String? = null,
+        val subAccount: String? = null,
+        val bearer: String? = null,
+        val transactionCharge: Long? = null,
+        val splitCode: String? = null,
+        val plan: String? = null,
+        val quantity: Long? = null,
+        val metadata: String? = null
+) :Parcelable {
 
     @IgnoredOnParcel
     private val channelsJsonAdapter: JsonAdapter<List<String>> = Moshi.Builder()
@@ -38,24 +35,21 @@ internal data class ChargeParams(
     fun toRequestMap(): Map<String, Any> {
 
         return mapOf(
-            "key" to publicKey,
-            "email" to email,
-            "amount" to amount,
-            "currency" to currency,
-            "channels" to channelsJson,
-            "firstName" to firstName,
-            "lastName" to lastName,
-            "phone" to phone,
-            "plan" to plan,
-            "subAccount" to subAccount,
-            "customerCode" to customerCode,
-            "reference" to reference,
-            "paymentPage" to paymentPage,
-            "paymentRequest" to paymentRequest,
-            "bearer" to bearer,
-            "metadata" to metadata,
-            "transactionCharge" to transactionCharge,
-            "orderId" to orderId,
+                "key" to publicKey,
+                "email" to email,
+                "amount" to amount,
+                "currency" to currency,
+                "channels" to channelsJson,
+                "phone" to phone,
+                "label" to label,
+                "ref" to reference,
+                "subaccount" to subAccount,
+                "bearer" to bearer,
+                "transactionCharge" to transactionCharge,
+                "split_code" to splitCode,
+                "plan" to plan,
+                "quantity" to quantity,
+                "metadata" to metadata,
         ).pruneNullValues()
     }
 
