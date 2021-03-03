@@ -39,7 +39,7 @@ internal class PaystackCheckoutTest {
             scenario.onActivity { activity ->
                 val chargeResult = ChargeResult.Success(TEST_SUCCESSFUL_TRANSACTION)
                 val testRegistry = getTestResultRegistry(chargeResult)
-                val paystackCheckout = PaystackCheckout.Builder(activity, TEST_EMAIL, 10000L)
+                val paystackCheckout = PaystackCheckout.Builder(activity, TEST_EMAIL, 10000L, "NGN")
                     .activityResultRegistry(testRegistry)
                     .publicKey(TEST_CHARGE_PARAMS.publicKey)
                     .build()
