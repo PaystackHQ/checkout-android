@@ -10,5 +10,6 @@ enum class PaymentChannel: Parcelable {
     ussd,
     qr,
     mobile_money,
-    bank_transfer
+    bank_transfer,
+    eft
 }

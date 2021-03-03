@@ -17,19 +17,16 @@ class PaystackCheckout private constructor(
     private val amount: Long,
     private val currency: String,
     private val channels: List<PaymentChannel>?,
-    private val firstName: String?,
-    private val lastName: String?,
     private val phone: String?,
-    private val plan: String?,
-    private val subAccount: String?,
-    private val customerCode: String?,
+    private val label: String?,
     private val reference: String?,
-    private val paymentPage: String?,
-    private val paymentRequest: String?,
+    private val subAccount: String?,
     private val bearer: String?,
-    private val metadata: String?,
     private val transactionCharge: Long?,
-    private val orderId: Long?,
+    private val splitCode: String?,
+    private val plan: String?,
+    private val quantity: Long?,
+    private val metadata: String?
 ) {
     private val chargeParams: ChargeParams
         get() = ChargeParams(
@@ -38,19 +35,16 @@ class PaystackCheckout private constructor(
             amount,
             currency,
             channels,
-            firstName,
-            lastName,
             phone,
-            plan,
-            subAccount,
-            customerCode,
+            label,
             reference,
-            paymentPage,
-            paymentRequest,
+            subAccount,
             bearer,
-            metadata,
             transactionCharge,
-            orderId
+            splitCode,
+            plan,
+            quantity,
+            metadata
         )
 
     fun charge(resultListener: CheckoutResultListener) {
@@ -73,19 +67,16 @@ class PaystackCheckout private constructor(
         private var publicKey = getPublicKeyFromManifest(activity)
 
         private var channels: List<PaymentChannel>? = null
-        private var firstName: String? = null
-        private var lastName: String? = null
         private var phone: String? = null
-        private var plan: String? = null
-        private var subAccount: String? = null
-        private var customerCode: String? = null
+        private var label: String? = null
         private var reference: String? = null
-        private var paymentPage: String? = null
-        private var paymentRequest: String? = null
+        private var subAccount: String? = null
         private var bearer: String? = null
-        private var metadata: String? = null
         private var transactionCharge: Long? = null
-        private var orderId: Long? = null
+        private var splitCode: String? = null
+        private var plan: String? = null
+        private var quantity: Long? = null
+        private var metadata: String? = null
 
         fun activityResultRegistry(resultRegistry: ActivityResultRegistry): Builder {
             this.activityResultRegistry = resultRegistry
@@ -97,13 +88,8 @@ class PaystackCheckout private constructor(
             return this
         }
 
-        fun firstName(firstName: String): Builder {
-            this.firstName = firstName
-            return this
-        }
-
-        fun lastName(lastName: String): Builder {
-            this.lastName = lastName
+        fun channels(vararg channels: PaymentChannel): Builder {
+            this.channels = channels.toList()
             return this
         }
 
@@ -112,18 +98,13 @@ class PaystackCheckout private constructor(
             return this
         }
 
+        fun label(label: String?): Builder {
+            this.label = label
+            return this
+        }
+
         fun reference(reference: String): Builder {
             this.reference = reference
-            return this
-        }
-
-        fun channels(vararg channels: PaymentChannel): Builder {
-            this.channels = channels.toList()
-            return this
-        }
-
-        fun plan(plan: String): Builder {
-            this.plan = plan
             return this
         }
 
@@ -132,28 +113,8 @@ class PaystackCheckout private constructor(
             return this
         }
 
-        fun customerCode(customerCode: String): Builder {
-            this.customerCode = customerCode
-            return this
-        }
-
-        fun paymentPage(paymentPage: String): Builder {
-            this.paymentPage = paymentPage
-            return this
-        }
-
-        fun paymentRequest(paymentRequest: String): Builder {
-            this.paymentRequest = paymentRequest
-            return this
-        }
-
         fun bearer(bearer: String): Builder {
             this.bearer = bearer
-            return this
-        }
-
-        fun metadata(metadata: String): Builder {
-            this.metadata = metadata
             return this
         }
 
@@ -162,8 +123,23 @@ class PaystackCheckout private constructor(
             return this
         }
 
-        fun orderId(orderId: Long): Builder {
-            this.orderId = orderId
+        fun splitCode(splitCode: String?): Builder {
+            this.splitCode = splitCode
+            return this
+        }
+
+        fun plan(plan: String): Builder {
+            this.plan = plan
+            return this
+        }
+
+        fun quantity(quantity: Long?): Builder {
+            this.quantity = quantity
+            return this
+        }
+
+        fun metadata(metadata: String?): Builder {
+            this.metadata = metadata
             return this
         }
 
@@ -176,19 +152,16 @@ class PaystackCheckout private constructor(
                 amount,
                 currency,
                 channels,
-                firstName,
-                lastName,
                 phone,
-                plan,
-                subAccount,
-                customerCode,
+                label,
                 reference,
-                paymentPage,
-                paymentRequest,
+                subAccount,
                 bearer,
-                metadata,
                 transactionCharge,
-                orderId,
+                splitCode,
+                plan,
+                quantity,
+                metadata
             )
         }
 

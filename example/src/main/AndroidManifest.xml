@@ -19,7 +19,7 @@
         </activity>
 
         <meta-data android:name="com.paystack.checkout.PublicKey"
-            android:value="pk_test_key" />
+            android:value="pk_domain_xxxxx" />
     </application>
 
 </manifest>
