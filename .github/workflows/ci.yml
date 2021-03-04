@@ -27,7 +27,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Check style
-        run: ./gradlew spotlessCheck lintDebug --stacktrace
+        run: ./gradlew spotlessCheck lintDebug -PisCI=true
     
     
   unit-tests:
@@ -47,7 +47,7 @@ jobs:
           java-version: 8
           
       - name: Run unit tests
-        run: ./gradlew testDebugUnitTest
+        run: ./gradlew testDebugUnitTest -PisCI=true
         
       - name: Upload test reports
         if: always()
@@ -82,7 +82,7 @@ jobs:
         with:
           api-level: ${{ matrix.api-level }}
           arch: x86
-          script: ./gradlew connectedDebugAndroidTest
+          script: ./gradlew connectedDebugAndroidTest -PisCI=true
           
       - name: Upload test reports
         if: always()
