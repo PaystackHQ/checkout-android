@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.paystack.checkout.CheckoutResultListener;
 import com.paystack.checkout.PaystackCheckout;
-import com.paystack.checkout.model.PaymentChannel;
 import com.paystack.checkout.model.Transaction;
 
 public class MainActivity extends AppCompatActivity {
@@ -24,9 +23,7 @@ public class MainActivity extends AppCompatActivity {
         Button payBtn = findViewById(R.id.btnPay);
         payBtn.setOnClickListener(v -> {
             PaystackCheckout checkout = new PaystackCheckout.Builder(this, "michael@paystack.com", 10000, "NGN")
-                    .firstName("Michael")
-                    .lastName("Obi")
-                    .channels(PaymentChannel.card, PaymentChannel.qr, PaymentChannel.bank_transfer)
+                    .reference("lezzGoLIvEagAIn41")
                     .build();
             checkout.charge(new CheckoutResultListener() {
                 @Override
