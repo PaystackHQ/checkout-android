@@ -4,7 +4,6 @@ import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.get
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
-import com.paystack.checkout.PaystackCheckoutTest
 import com.paystack.checkout.data.remote.PaystackApi
 import com.paystack.checkout.data.remote.TransactionInitResponse
 import com.paystack.checkout.model.ChargeParams
