@@ -7,7 +7,6 @@ import androidx.activity.result.contract.ActivityResultContract
 import androidx.core.app.ActivityOptionsCompat
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
-import com.nhaarman.mockitokotlin2.verify
 import com.paystack.checkout.model.ChargeParams
 import com.paystack.checkout.model.ChargeResult
 import com.paystack.checkout.model.Transaction
@@ -15,6 +14,7 @@ import com.paystack.checkout.ui.CheckoutActivity
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
+import org.mockito.Mockito.verify
 import org.mockito.MockitoAnnotations
 
 internal class PaystackCheckoutTest {
