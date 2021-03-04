@@ -20,12 +20,24 @@ buildscript {
     }
 }
 
-allprojects {
+plugins {
+    id("com.diffplug.spotless") version "5.7.0"
+}
+
+subprojects {
     repositories {
         google()
         jcenter()
         mavenCentral()
     }
-}
 
-apply(plugin = "org.jlleitschuh.gradle.ktlint")
+    apply(plugin = "com.diffplug.spotless")
+    spotless {
+        kotlin {
+            target("**/*.kt")
+            targetExclude("$buildDir/**/*.kt")
+            targetExclude("bin/**/*.kt")
+            ktlint("0.40.0")
+        }
+    }
+}
