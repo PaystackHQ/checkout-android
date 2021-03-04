@@ -82,7 +82,7 @@ internal class PaystackApiRepositoryTest {
         const val testAmount = 10000L
         const val testCurrency = "NGN"
 
-        val TEST_CHARGE_PARAMS = ChargeParams("pk_test_test_key_value", PaystackCheckoutTest.TEST_EMAIL, 10000L, "NGN")
+        val TEST_CHARGE_PARAMS = ChargeParams("pk_test_test_key_value", testEmail, 10000L, "NGN")
         val transactionInitResponse = TransactionInitResponse(
             status = "success",
             message = "Successful",
