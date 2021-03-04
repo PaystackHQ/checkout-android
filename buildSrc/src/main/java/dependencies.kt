@@ -11,7 +11,7 @@ object Libs {
 
     const val junit = "junit:junit:4.13"
     const val mockitoKotlin = "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
-    const val mockitoAndroid = "org.mockito:mockito-android:3.8.5"
+    const val mockitoAndroid = "org.mockito:mockito-android:3.8.0"
 
     const val constraintLayout = "androidx.constraintlayout:constraintlayout:2.0.0"
 
