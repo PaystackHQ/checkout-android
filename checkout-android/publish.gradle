@@ -63,6 +63,7 @@ artifacts {
 }
 
 // Bintray
+println("isCI=" + System.getenv("isCI"))
 def isCI = System.getenv("isCI") == "true"
 String bintrayUser, bintrayKey
 if (isCI) {
