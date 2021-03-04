@@ -4,7 +4,7 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-enum class PaymentChannel: Parcelable {
+enum class PaymentChannel : Parcelable {
     card,
     bank,
     ussd,

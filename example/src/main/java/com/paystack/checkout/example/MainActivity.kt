@@ -7,9 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.paystack.checkout.CheckoutResultListener
 import com.paystack.checkout.PaystackCheckout
 import com.paystack.checkout.example.databinding.MainActivityBinding
-import com.paystack.checkout.model.PaymentChannel
 import com.paystack.checkout.model.Transaction
-import java.util.*
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: MainActivityBinding
@@ -61,12 +59,15 @@ class MainActivity : AppCompatActivity() {
                     "value": "Bongo Kivu"
                 }
             ]
-        }""".trimIndent()
+        }
+        """.trimIndent()
 
         println(metadata)
 
-        val checkoutBuilder = PaystackCheckout.Builder(this, "again@week.com",
-                50000, "NGN")
+        val checkoutBuilder = PaystackCheckout.Builder(
+            this, "again@week.com",
+            50000, "NGN"
+        )
         checkoutBuilder.apply {
             reference("lezzGoLIvEagAIn41")
             metadata(metadata)
