@@ -54,7 +54,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: unit-test-reports
-          path: app/build/reports
+          path: checkout-android/build/reports
 
 
   instrumentation-tests:
@@ -89,5 +89,5 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: instrumented-test-reports
-          path: app/build/reports
+          path: checkout-android/build/reports
     
