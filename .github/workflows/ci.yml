@@ -27,7 +27,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Check style
-        run: ./gradlew spotlessCheck lintDebug --stacktrace
+        run: ./gradlew spotlessCheck lintDebug -DisCI=true
     
     
   unit-tests:
@@ -47,14 +47,14 @@ jobs:
           java-version: 8
           
       - name: Run unit tests
-        run: ./gradlew testDebugUnitTest
+        run: ./gradlew testDebugUnitTest -DisCI=true
         
       - name: Upload test reports
         if: always()
         uses: actions/upload-artifact@v2
         with:
           name: unit-test-reports
-          path: app/build/reports
+          path: checkout-android/build/reports
 
 
   instrumentation-tests:
@@ -62,7 +62,7 @@ jobs:
     runs-on: macOS-latest
     timeout-minutes: 20
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         api-level: [21, 23, 26, 29]
     steps:
@@ -82,12 +82,12 @@ jobs:
         with:
           api-level: ${{ matrix.api-level }}
           arch: x86
-          script: ./gradlew connectedDebugAndroidTest
+          script: ./gradlew connectedDebugAndroidTest -DisCI=true
           
       - name: Upload test reports
         if: always()
         uses: actions/upload-artifact@v2
         with:
           name: instrumented-test-reports
-          path: app/build/reports
+          path: checkout-android/build/reports
     

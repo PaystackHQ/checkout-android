@@ -46,6 +46,10 @@ android {
     lintOptions {
         enable("Interoperability")
     }
+
+    packagingOptions {
+        exclude("META-INF/*.kotlin_module")
+    }
 }
 
 // Avoid Kotlin docs error
@@ -81,7 +85,6 @@ dependencies {
     testImplementation(Libs.mockitoKotlin)
     testImplementation(Libs.Coroutines.test)
 
-    androidTestImplementation(Libs.mockitoKotlin)
     androidTestImplementation(Libs.mockitoAndroid)
     androidTestImplementation(Libs.AndroidX.Test.core)
     androidTestImplementation(Libs.AndroidX.Test.Ext.junit)

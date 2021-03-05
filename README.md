@@ -1,4 +1,5 @@
 # Paystack Checkout Android
+[![CI](https://github.com/PaystackHQ/checkout-android/actions/workflows/ci.yml/badge.svg)](https://github.com/PaystackHQ/checkout-android/actions/workflows/ci.yml)
 [ ![Download](https://api.bintray.com/packages/paystack/maven/checkout-android/images/download.svg) ](https://bintray.com/paystack/maven/checkout-android/_latestVersion)
 ## Requirements
 

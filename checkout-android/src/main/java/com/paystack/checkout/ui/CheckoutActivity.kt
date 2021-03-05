@@ -64,7 +64,7 @@ internal class CheckoutActivity : AppCompatActivity() {
     @SuppressLint("SetJavaScriptEnabled")
     private fun setupTransactionWebView(paymentUrl: String) {
         if (!WebViewFeature.isFeatureSupported(WebViewFeature.CREATE_WEB_MESSAGE_CHANNEL)) {
-            //TODO: Finish with error result if web message channels aren't supported
+            // TODO: Finish with error result if web message channels aren't supported
 
             return
         }

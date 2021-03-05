@@ -39,7 +39,6 @@ internal class CheckoutViewModel(private val paystackRepository: PaystackReposit
                     )
                 }
             }
-
         }
     }
 
