@@ -46,6 +46,10 @@ android {
     lintOptions {
         enable("Interoperability")
     }
+
+    packagingOptions {
+        exclude("META-INF/*.kotlin_module")
+    }
 }
 
 // Avoid Kotlin docs error
