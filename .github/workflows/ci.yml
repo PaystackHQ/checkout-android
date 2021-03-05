@@ -62,7 +62,7 @@ jobs:
     runs-on: macOS-latest
     timeout-minutes: 20
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         api-level: [21, 23, 26, 29]
     steps:
