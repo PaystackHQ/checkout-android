@@ -62,12 +62,11 @@ class MainActivity : AppCompatActivity() {
         }
         """.trimIndent()
 
-        println(metadata)
-
         val checkoutBuilder = PaystackCheckout.Builder(
             this, "again@week.com",
             50000, "NGN"
         )
+
         checkoutBuilder.apply {
             reference("lezzGoLIvEagAIn41")
             metadata(metadata)

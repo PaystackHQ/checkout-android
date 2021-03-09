@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.paystack.checkout.CheckoutResultListener;
 import com.paystack.checkout.PaystackCheckout;
+import com.paystack.checkout.model.PaymentChannel;
 import com.paystack.checkout.model.Transaction;
 
 public class MainActivity extends AppCompatActivity {
@@ -21,8 +22,21 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Button payBtn = findViewById(R.id.btnPay);
+        String metadata = "{" +
+                "\"age\":\"50\"," +
+                "\"custom_fields\": [" +
+                    "{" +
+                        "\"display_name\": \"Brand\"," +
+                        "\"variable_name\": \"brand\"," +
+                        "\"value\": \"Bongo Kivu\"" +
+                    "}" +
+                "]" +
+        "}";
+
         payBtn.setOnClickListener(v -> {
             PaystackCheckout checkout = new PaystackCheckout.Builder(this, "michael@paystack.com", 10000, "NGN")
+                    .channels(PaymentChannel.card, PaymentChannel.qr, PaymentChannel.bank_transfer)
+                    .metadata(metadata)
                     .reference("lezzGoLIvEagAIn41")
                     .build();
             checkout.charge(new CheckoutResultListener() {
