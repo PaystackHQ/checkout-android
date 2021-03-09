@@ -5,5 +5,5 @@ import com.paystack.checkout.ui.CheckoutViewModel.CheckoutViewModelFactory
 
 internal object CheckoutContainer {
 
-    val checkoutViewModelFactory  = CheckoutViewModelFactory(dataModule().paystackRepository)
+    val checkoutViewModelFactory = CheckoutViewModelFactory(dataModule().paystackRepository)
 }

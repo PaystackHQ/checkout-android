@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
             PaystackCheckout checkout = new PaystackCheckout.Builder(this, "michael@paystack.com", 10000, "NGN")
                     .channels(PaymentChannel.card, PaymentChannel.qr, PaymentChannel.bank_transfer)
                     .metadata(metadata)
+                    .reference("lezzGoLIvEagAIn41")
                     .build();
             checkout.charge(new CheckoutResultListener() {
                 @Override

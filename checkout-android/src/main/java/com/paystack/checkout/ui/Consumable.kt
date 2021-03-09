@@ -26,7 +26,7 @@ internal class Consumable<out T>(private val content: T) {
      *
      * @return [true] if consumer runs successfully and [false] otherwise
      */
-    fun consumeIfAvailable(consumer: (T) ->  Unit): Boolean {
+    fun consumeIfAvailable(consumer: (T) -> Unit): Boolean {
         val content = readContent()
         if (content != null) {
             consumer(content)
