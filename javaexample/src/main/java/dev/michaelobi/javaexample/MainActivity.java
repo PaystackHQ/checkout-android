@@ -22,11 +22,21 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Button payBtn = findViewById(R.id.btnPay);
+        String metadata = "{" +
+                "\"age\":\"50\"," +
+                "\"custom_fields\": [" +
+                    "{" +
+                        "\"display_name\": \"Brand\"," +
+                        "\"variable_name\": \"brand\"," +
+                        "\"value\": \"Bongo Kivu\"" +
+                    "}" +
+                "]" +
+        "}";
+
         payBtn.setOnClickListener(v -> {
             PaystackCheckout checkout = new PaystackCheckout.Builder(this, "michael@paystack.com", 10000, "NGN")
-                    .firstName("Michael")
-                    .lastName("Obi")
                     .channels(PaymentChannel.card, PaymentChannel.qr, PaymentChannel.bank_transfer)
+                    .metadata(metadata)
                     .build();
             checkout.charge(new CheckoutResultListener() {
                 @Override
