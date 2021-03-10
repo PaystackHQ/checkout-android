@@ -15,6 +15,7 @@ import androidx.webkit.WebMessagePortCompat
 import androidx.webkit.WebViewCompat
 import androidx.webkit.WebViewFeature
 import com.paystack.checkout.databinding.CheckoutActivityBinding
+import com.paystack.checkout.exception.MissingWebViewException
 import com.paystack.checkout.model.ChargeParams
 import com.paystack.checkout.model.ChargeResult
 import com.paystack.checkout.model.CheckoutEvent
@@ -38,6 +39,11 @@ internal class CheckoutActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (WebViewCompat.getCurrentWebViewPackage(this) == null) {
+            closeWithError(MissingWebViewException())
+            return
+        }
 
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         binding = CheckoutActivityBinding.inflate(layoutInflater)
