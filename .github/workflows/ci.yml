@@ -81,7 +81,8 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
-          arch: x86
+          arch: x86_64
+          target: google_apis
           script: ./gradlew connectedDebugAndroidTest -DisCI=true
           
       - name: Upload test reports
