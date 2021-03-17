@@ -22,14 +22,14 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 8
-          
+
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
       - name: Check style
         run: ./gradlew spotlessCheck lintDebug -DisCI=true
-    
-    
+
+
   unit-tests:
     name: Unit tests
     runs-on: ubuntu-latest
@@ -40,55 +40,18 @@ jobs:
 
       - name: Validate Gradle Wrapper
         uses: gradle/wrapper-validation-action@v1
-        
+
       - name: Set up JDK 8
         uses: actions/setup-java@v1
         with:
           java-version: 8
-          
+
       - name: Run unit tests
         run: ./gradlew testDebugUnitTest -DisCI=true
-        
+
       - name: Upload test reports
         if: always()
         uses: actions/upload-artifact@v2
         with:
           name: unit-test-reports
           path: checkout-android/build/reports
-
-
-  instrumentation-tests:
-    name: Instrumentation tests
-    runs-on: macOS-latest
-    timeout-minutes: 20
-    strategy:
-      fail-fast: false
-      matrix:
-        api-level: [21, 23, 26, 29]
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Validate Gradle Wrapper
-        uses: gradle/wrapper-validation-action@v1
-        
-      - name: Set up JDK 8
-        uses: actions/setup-java@v1
-        with:
-          java-version: 8
-          
-      - name: Instrumentation tests
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: ${{ matrix.api-level }}
-          arch: x86_64
-          target: google_apis
-          script: ./gradlew connectedDebugAndroidTest -DisCI=true
-          
-      - name: Upload test reports
-        if: always()
-        uses: actions/upload-artifact@v2
-        with:
-          name: instrumented-test-reports
-          path: checkout-android/build/reports
-    
