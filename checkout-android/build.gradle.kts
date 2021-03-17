@@ -92,7 +92,7 @@ dependencies {
 }
 
 extra.apply {
-    set("libraryVersion", "0.1.0-alpha06")
+    set("libraryVersion", "1.0.0-beta01")
 
     set("bintrayRepo", "maven")
     set("bintrayName", "checkout-android")
