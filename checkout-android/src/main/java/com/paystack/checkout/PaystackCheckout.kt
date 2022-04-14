@@ -47,6 +47,7 @@ class PaystackCheckout private constructor(
             metadata
         )
 
+    //fix issues
      private lateinit var resultListener: CheckoutResultListener
 
     private val preContractStartActivityResult =
