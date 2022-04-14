@@ -47,14 +47,21 @@ class PaystackCheckout private constructor(
             metadata
         )
 
-    fun charge(resultListener: CheckoutResultListener) {
+     private lateinit var resultListener: CheckoutResultListener
+
+    private val preContractStartActivityResult =
         activity.registerForActivityResult(PayWithCheckout(), resultRegistry) { chargeResult ->
             when (chargeResult) {
                 is ChargeResult.Success -> resultListener.onSuccess(chargeResult.transaction)
                 is ChargeResult.Error -> resultListener.onError(chargeResult.exception)
                 ChargeResult.Cancelled -> resultListener.onCancelled()
             }
-        }.launch(chargeParams)
+        }
+
+
+    fun charge(resultListener: CheckoutResultListener) {
+        this.resultListener = resultListener
+        preContractStartActivityResult .launch(chargeParams)
     }
 
     class Builder(
